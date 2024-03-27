@@ -6,6 +6,8 @@ import os
 import base64
 import json
 import pandas as pd
+import random
+import string
 
 load_dotenv()
 
@@ -486,8 +488,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
