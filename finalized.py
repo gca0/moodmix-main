@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 import os
 import base64
 import json
+import pandas as pd
+import random
+import string
 
 load_dotenv()
 
@@ -180,6 +183,9 @@ COUNTRIES = [
 
 # files
 expanded_word_data = "word_data_with_colors.csv"
+iso_countries = "country_iso_codes.xlsx"
+# Load the Excel file into a pandas DataFrame
+df = pd.read_excel(iso_countries)
 
 # emotion AV ranges
 SAD_VALENCE = [0.98, 4.5]
@@ -238,12 +244,12 @@ def get_auth_header(token):
     return {"Authorization": "Bearer "+token}
 
 # Function to get Spotify recommendations based on audio feature ranges
-def get_spotify_recommendations(num_songs, desired_markets, audio_ft_ranges, selected_genre, access_token):
+def get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genre, access_token):
 
     endpoint_url = "https://api.spotify.com/v1/recommendations?"
     headers = get_auth_header(access_token)
     
-    query = f'limit={num_songs}&market={desired_markets}&seed_genres={selected_genre}'
+    query = f'limit={num_songs}&market=US&seed_genres={selected_genre}'
     query += f'&min_acousticness={audio_ft_ranges[0]["acousticness"][0]}'
     query += f'&max_acousticness={audio_ft_ranges[0]["acousticness"][1]}'
     query += f'&min_danceability={audio_ft_ranges[0]["danceability"][0]}'
@@ -272,8 +278,15 @@ def get_spotify_recommendations(num_songs, desired_markets, audio_ft_ranges, sel
 
     for i in json_result['tracks']:
         st.write(f"\"{i['name']}\" by {i['artists'][0]['name']}")
+        print(f"\"{i['name']}\" by {i['artists'][0]['name']}")
 
-
+# Function to get country code based on country name
+def get_country_code(country_name):
+    try:
+        code = df.loc[df['Country'].str.lower() == country_name.lower(), 'Alpha-2 code'].iloc[0]
+        return code
+    except IndexError:
+        return "Country not found"
 
 # searches for user inputted word in expanded word data, and return the valence and arousal
 def search_word(word): 
@@ -376,68 +389,100 @@ def get_audio_ft_range(emotion):
 
 # user front end stuff
 def main():
-    words = []
-    inputs_count = 0
-
+    
+    # # Function to generate HTML for removing a tag
+    # def remove_tag_js(tag):
+    #     return f"""<script>
+    #                 document.getElementById('{tag}').remove();
+    #             </script>"""
+    
     # Streamlit UI components for user input
     st.title("MoodMix")
 
-    # Function to generate HTML for removing a tag
-    def remove_tag_js(tag):
-        return f"""<script>
-                    document.getElementById('{tag}').remove();
-                  </script>"""
+    words = []
+    inputs_count = 0
 
-    while len(words) < 8:
-        input_word = st.text_input("Enter a word or phrase (type 'y' to stop): ").strip().lower()
-        if input_word == 'y':
-            break
+    # # 5 input components for user input (words)
+    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_1').strip().lower())
+    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_2').strip().lower())
+    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_3').strip().lower())
+    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_4').strip().lower())
+    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_5').strip().lower())
 
-        # Display entered words as tags
-        if input_word:
-            words.append(input_word)
-            st.write(f"<span id='{input_word}' class='tag'>{input_word}<span class='close' onclick=\"{remove_tag_js(input_word)}\">&times;</span></span>", unsafe_allow_html=True)
-            inputs_count += 1
+    # add new rows
+    # if 'count' not in st.session_state:
+    #     st.session_state.count = 0
 
-        if inputs_count >= 5:
-            if len(words) >= 8:
-                st.write("You've entered 8 words. We'll stop adding more words.")
-                break
-            choice = st.radio("You've entered at least 5 words. Do you want to add more?", ('Yes', 'No'))
-            if choice != 'Yes':
-                break
+    # def add_new_row():
+    #     st.text_input("Please input something",key=random.choice(string.ascii_uppercase)+str(random.randint(0,999999)))
 
-        # determine the emotion(s) of the user input
+    # if st.button("Add new row"):
+    #     st.session_state.count += 1
+    #     add_new_row()
+    #     if st.session_state.count>1:
+    #         for i in range(st.session_state.count-1):
+    #             add_new_row()
+
+    # Main loop to handle user input
+    while len(words) < 5:
+        input_word = st.text_input("Enter a word or phrase: ", key=f"user_input_words_{inputs_count}").strip().lower()
+        words.append(input_word)
+        inputs_count += 1
+        st.write(input_word)
+    
+    # add_fields_button_clicked = st.button("Add word (Max 8)")
+    # if add_fields_button_clicked: 
+    #     input_word = st.text_input("Enter a word or phrase: ", key=f"user_input_words_{inputs_count}").strip().lower()
+    #     words.append(input_word)
+    #     inputs_count += 1
+    #     st.write(input_word)
+
+        # if inputs_count >= 5:
+        #     choice = st.radio("You've entered at least 5 words. Do you want to add more?", ('Yes', 'No'), key=f"ask_user_if_more_words_{inputs_count}")
+        #     if choice != 'No':
+        #         break
+        
+        # if len(words) >= 8:
+        #     st.write("You've entered 8 words. We'll stop adding more words.")
+        #     break
+
+    # determine the emotion(s) of the user input
     emotions = categorize_emotion(words)
     access_token = get_access_token()
-    if emotions:
-        # Prompt the user for genre selection
-        # Create a dropdown menu with multiple selection enabled
-        selected_genres = st.multiselect("Select Genres", GENRES)
+    # Prompt the user for genre selection
+    # Create a dropdown menu with multiple selection enabled
+    selected_genres = st.multiselect("Select Genres", GENRES)
+    print(selected_genres)
 
-        # Convert the list of selected genres to a single string with "%2C" in between each genre
-        selected_genres_str = "%2C".join(selected_genres)
+    # Convert the list of selected genres to a single string with "%2C" in between each genre
+    selected_genres_str = "%2C".join(selected_genres)
 
-        # Display the selected genres
-        st.write("Selected Genres:", selected_genres)
+    # Display the selected genres
+    st.write("Selected Genres:", selected_genres)
 
-        # prompt user for markets 
-        markets = st.multiselect("Select country of origin (max 5):", COUNTRIES)
-        selected_markets = "%2C".join(markets)
-        st.write("Selected Markets:", markets)
+    # # prompt user for markets 
+    # market_input = st.multiselect("Select country of origin (max 5):", COUNTRIES)
 
-        # Button to generate songs
-        generate_button_clicked = st.button("Generate Songs")
+    # selected_markets = []
+    # for market in market_input: 
+    #     selected_markets.append(get_country_code(market))
 
-        # Check if the button is clicked
-        if generate_button_clicked:
-            num_songs = 10
-            access_token = get_access_token()
-            emotions = categorize_emotion(words.split())  # Split input words into a list
-            if emotions:
-                for emotion in emotions:
-                    audio_ft_ranges = get_audio_ft_range(emotion)
-                    get_spotify_recommendations(num_songs, selected_markets, audio_ft_ranges, selected_genres_str, access_token)
+    # selected_markets = "%2C".join(selected_markets)
+    # st.write("Selected Markets:", market_input)
+
+    # Button to generate songs
+    generate_button_clicked = st.button("Generate Songs")
+
+    # Check if the button is clicked
+    if generate_button_clicked:
+        num_songs = 10
+        access_token = get_access_token()
+        emotions = categorize_emotion(words)
+        st.write("the emotion(s) associated with your input: ", emotions)
+        if emotions:
+            for emotion in emotions:
+                audio_ft_ranges = get_audio_ft_range(emotion)
+                get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genres_str, access_token)
 
 
 
