@@ -1,6 +1,6 @@
 streamlit
 requests
-dotenv
+python-dotenv
 os
 base64
 json
