@@ -49,9 +49,9 @@ body {
     height: 500px;
     width: 500px;
     border-radius: 50%;
-    background-image: linear-gradient(80deg, rgb(5, 124, 172), rgba(183, 253, 52, 0.8));
+    background-image: linear-gradient(80deg, rgb(199, 10, 160), rgba(183, 253, 52, 0.8));
     filter: blur(80px);
-    animation: left 30s 1s infinite;
+    animation: left 40s 1s infinite;
 }
 
 #right {
@@ -61,7 +61,7 @@ body {
     border-radius: 50%;
     background-image: linear-gradient(80deg, rgba(26, 248, 18, 0.6), rgba(199, 10, 52, 0.8));
     filter: blur(80px);
-    animation: left 40s .5s infinite;
+    animation: right 30s .5s infinite;
 }
 
 @keyframes fadeIn {
@@ -96,7 +96,7 @@ body {
         left: -100px;
     }
     70%{
-        left: 1300;
+        left: 1000px;
     }
 }
 
@@ -105,7 +105,7 @@ body {
         right: -100px;
     }
     70%{
-        right: 1300;
+        right: 1000px;
     }
 }
 
@@ -523,8 +523,8 @@ def main():
     #                 document.getElementById('{tag}').remove();
     #             </script>"""
     
-    # Streamlit UI components for user input
-    st.header("moodmix", divider="green")
+    # # Streamlit UI components for user input
+    # st.header("moodmix", divider="green")
 
     words = []
     inputs_count = 0
