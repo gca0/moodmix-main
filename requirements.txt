@@ -3,3 +3,4 @@ requests
 python-dotenv
 pybase64
 pandas
+openpyxl
