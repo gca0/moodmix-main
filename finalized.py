@@ -552,7 +552,7 @@ def main():
 
     # Main loop to handle user input
     while len(words) < 5:
-        input_word = st.text_input("Enter a noun or verb: ", key=f"user_input_words_{inputs_count}").strip().lower()
+        input_word = st.text_input("enter a noun or verb: ", key=f"user_input_words_{inputs_count}").strip().lower()
         words.append(input_word)
         inputs_count += 1
         st.write(input_word)
@@ -578,7 +578,7 @@ def main():
     access_token = get_access_token()
     # Prompt the user for genre selection
     # Create a dropdown menu with multiple selection enabled
-    selected_genres = st.multiselect("Select Genres", GENRES)
+    selected_genres = st.multiselect("select genres (max 5)", GENRES)
     print(selected_genres)
 
     # Convert the list of selected genres to a single string with "%2C" in between each genre
