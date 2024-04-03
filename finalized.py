@@ -400,7 +400,7 @@ def main():
     #             </script>"""
     
     # Streamlit UI components for user input
-    st.title("MoodMix")
+    st.header("moodmix", divider="green")
 
     words = []
     inputs_count = 0
