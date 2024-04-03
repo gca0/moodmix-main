@@ -7,6 +7,11 @@ import base64
 import json
 import pandas as pd
 
+st.set_page_config(
+    page_title="moodmix",
+    page_icon="🎶"
+)
+
 load_dotenv()
 
 # CONSTANTS
