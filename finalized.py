@@ -6,8 +6,6 @@ import os
 import base64
 import json
 import pandas as pd
-import random
-import string
 
 load_dotenv()
 
