@@ -425,7 +425,7 @@ def main():
 
     # Main loop to handle user input
     while len(words) < 5:
-        input_word = st.text_input("Enter a word or phrase: ", key=f"user_input_words_{inputs_count}").strip().lower()
+        input_word = st.text_input("Enter a noun or verb: ", key=f"user_input_words_{inputs_count}").strip().lower()
         words.append(input_word)
         inputs_count += 1
         st.write(input_word)
