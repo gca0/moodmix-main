@@ -585,7 +585,7 @@ def main():
     selected_genres_str = "%2C".join(selected_genres)
 
     # Display the selected genres
-    st.write("Selected Genres:", selected_genres)
+    st.write("selected genre(s):", selected_genres)
 
     # # prompt user for markets 
     # market_input = st.multiselect("Select country of origin (max 5):", COUNTRIES)
@@ -598,7 +598,7 @@ def main():
     # st.write("Selected Markets:", market_input)
 
     # Button to generate songs
-    generate_button_clicked = st.button("Generate Songs")
+    generate_button_clicked = st.button("generate songs")
 
     # Check if the button is clicked
     if generate_button_clicked:
