@@ -1,7 +1,6 @@
 streamlit
 requests
 python-dotenv
-os
 base64
 json
 pandas
