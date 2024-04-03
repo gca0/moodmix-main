@@ -1,0 +1,8 @@
+streamlit
+csv
+requests
+dotenv
+os
+base64
+json
+pandas
