@@ -1,4 +1,5 @@
 [theme]
 primaryColor="FFFFFF"
 backgroundColor="#000000"
+textColor = '#000000'
 base="dark"
