@@ -405,10 +405,13 @@ def get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genre, acce
     result = get(query_url, headers=headers)
     json_result = json.loads(result.content)
 
+    songs_text = ""
     for i in json_result['tracks']:
-        st.write(f"\"{i['name']}\" by {i['artists'][0]['name']}")
+        songs_text += f"\"{i['name']}\" by {i['artists'][0]['name']}<br>"
         print(f"\"{i['name']}\" by {i['artists'][0]['name']}")
-
+    
+    return songs_text
+    
 # Function to get country code based on country name
 def get_country_code(country_name):
     try:
@@ -555,7 +558,7 @@ def main():
     tabs_font_css = """
     <style>
     div[class*="stTextArea"] label p {
-    font-size: 30px;
+    font-size: 15px;
     }
 
     div[class*="stTextInput"] label p {
@@ -659,17 +662,41 @@ def main():
     # Button to generate songs
     st.text("")
     generate_button_clicked = st.button(" **generate songs** ")
+    st.text("")
 
     # Check if the button is clicked
+    results = ""
     if generate_button_clicked:
         num_songs = 10
         access_token = get_access_token()
         emotions = categorize_emotion(words)
-        st.write("the emotion(s) associated with your input: ", emotions)
-        if emotions:
-            for emotion in emotions:
-                audio_ft_ranges = get_audio_ft_range(emotion)
-                get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genres_str, access_token)
+        st.write("**the emotion(s) associated with your input:** ")
+        st.markdown(
+            "<div style='display: flex;'>"
+            + "".join([
+                f"<div style='background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; margin-right:10px;'>"
+                f"<span style='font-weight:bold;'>{emotion}</span>"
+                "</div>"
+                for emotion in emotions
+            ])
+            + "</div>",
+            unsafe_allow_html=True
+        )
+
+        st.text("")
+        st.write("<div style='text-align:center; font-weight:bold; font-size:20px;'>generating your songs...</div>", unsafe_allow_html=True)
+        st.text("")
+
+        for emotion in emotions:
+            audio_ft_ranges = get_audio_ft_range(emotion)
+            results += get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genres_str, access_token)
+
+        st.markdown(
+            f"<div style='background-color:#000000; padding:10px; border-radius:20px;'>"
+            f"{results}"
+            "</div>", 
+            unsafe_allow_html=True
+        )
 
 
 
