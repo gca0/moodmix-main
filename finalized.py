@@ -692,11 +692,12 @@ def main():
             results += get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genres_str, access_token)
 
         st.markdown(
-            f"<div style='background-color:#000000; padding:10px; border-radius:20px;'>"
+            f"<div style='background-color:#FFFFFF; color:black; padding:10px; border-radius:20px; font-weight:bold;'>"
             f"{results}"
             "</div>", 
             unsafe_allow_html=True
         )
+
 
 
 
