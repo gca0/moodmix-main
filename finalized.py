@@ -9,7 +9,8 @@ import pandas as pd
 
 st.set_page_config(
     page_title="moodmix",
-    page_icon="🎶"
+    page_icon="🎶",
+    layout="wide"
 )
 
 # CSS styles
@@ -131,8 +132,9 @@ st.markdown(css, unsafe_allow_html=True)
 st.markdown(html, unsafe_allow_html=True)
 
 st.markdown("<h1 style='color: white; opacity: 0; animation: fadeIn 5s ease forwards, floating 2s ease infinite;'>"
-            "<span style='font-weight:normal;'>mood</span><span style='font-weight:bold;'>mix</span>"
+            "<span style='font-weight:bold; font-family: serif; font-size: 70px;'>moodmix</span>"
             "</h1>", unsafe_allow_html=True)
+
 
 # EXIT STYLING
 # --------------------------------------------------------
@@ -550,12 +552,68 @@ def main():
     #         for i in range(st.session_state.count-1):
     #             add_new_row()
 
-    # Main loop to handle user input
-    while len(words) < 5:
-        input_word = st.text_input("enter a noun or verb: ", key=f"user_input_words_{inputs_count}").strip().lower()
-        words.append(input_word)
-        inputs_count += 1
-        st.write(input_word)
+    tabs_font_css = """
+    <style>
+    div[class*="stTextArea"] label p {
+    font-size: 30px;
+    }
+
+    div[class*="stTextInput"] label p {
+    font-size: 15px;
+    }
+
+    div[class*="stNumberInput"] label p {
+    font-size: 10px;
+    }
+
+    div[class*="stMultiSelect"] label p {
+    font-size: 15px;
+    }
+    
+    </style>
+    """
+    st.write(tabs_font_css, unsafe_allow_html=True)
+
+    col1, col2, col3, col4, col5 = st.columns(5)
+    with col1: 
+        input1 = st.text_input("**enter adjectives/nouns:**", key=f"user_input_words_{1}").strip().lower()
+        words.append(input1)
+        if input1: 
+            st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input1}</b></div>', unsafe_allow_html=True)
+    
+    with col2: 
+        input2 = st.text_input(" ", key=f"user_input_words_{2}").strip().lower()
+        words.append(input2)
+        if input2: 
+            st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input2}</b></div>', unsafe_allow_html=True)
+
+    with col3: 
+        input3 = st.text_input(" ", key=f"user_input_words_{3}").strip().lower()
+        words.append(input3)
+        if input3: 
+            st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input3}</b></div>', unsafe_allow_html=True)
+    
+    with col4: 
+        input4 = st.text_input(" ", key=f"user_input_words_{4}").strip().lower()
+        words.append(input4)
+        if input4: 
+            st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input4}</b></div>', unsafe_allow_html=True)
+
+    with col5: 
+        input5 = st.text_input(" ", key=f"user_input_words_{5}").strip().lower()
+        words.append(input5)
+        if input5: 
+            st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input5}</b></div>', unsafe_allow_html=True)
+
+
+
+
+    # # Main loop to handle user input
+    # while len(words) < 5:
+    #     input_word = st.text_input("enter a noun or verb: ", key=f"user_input_words_{inputs_count}").strip().lower()
+    #     words.append(input_word)
+    #     inputs_count += 1
+        
     
     # add_fields_button_clicked = st.button("Add word (Max 8)")
     # if add_fields_button_clicked: 
@@ -578,14 +636,15 @@ def main():
     access_token = get_access_token()
     # Prompt the user for genre selection
     # Create a dropdown menu with multiple selection enabled
-    selected_genres = st.multiselect("select genres (max 5)", GENRES)
+    st.text("")
+    selected_genres = st.multiselect("**select genres (max 5):**", GENRES)
     print(selected_genres)
 
     # Convert the list of selected genres to a single string with "%2C" in between each genre
     selected_genres_str = "%2C".join(selected_genres)
 
-    # Display the selected genres
-    st.write("selected genre(s):", selected_genres)
+    # # Display the selected genres
+    # st.write("selected genre(s):", selected_genres)
 
     # # prompt user for markets 
     # market_input = st.multiselect("Select country of origin (max 5):", COUNTRIES)
@@ -598,7 +657,8 @@ def main():
     # st.write("Selected Markets:", market_input)
 
     # Button to generate songs
-    generate_button_clicked = st.button("generate songs")
+    st.text("")
+    generate_button_clicked = st.button(" **generate songs** ")
 
     # Check if the button is clicked
     if generate_button_clicked:
