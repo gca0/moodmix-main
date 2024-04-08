@@ -597,7 +597,7 @@ def main():
 
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1: 
-        input1 = st.text_input("**enter adjectives/nouns:**", key=f"user_input_words_{1}").strip().lower()
+        input1 = st.text_input("**enter adjectives/nouns/verbs:**", key=f"user_input_words_{1}").strip().lower()
         words.append(input1)
         if input1: 
             st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input1}</b></div>', unsafe_allow_html=True)
