@@ -597,7 +597,7 @@ def main():
 
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1: 
-        input1 = st.text_input("**enter adjectives/nouns/verbs:**", key=f"user_input_words_{1}").strip().lower()
+        input1 = st.text_input("**enter adjective/noun/verbs:**", key=f"user_input_words_{1}").strip().lower()
         words.append(input1)
         if input1: 
             st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input1}</b></div>', unsafe_allow_html=True)
@@ -710,6 +710,7 @@ def main():
             results += get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genres_str, access_token)
         
         print(results)
+        st.write("<div style='text-align:center; font-weight:bold; font-size:14px;'>click on a song to listen on spotify:</div>", unsafe_allow_html=True)
         st.markdown(
             f"<div style='background-color:#FFFFFF; color:black; padding:10px; border-radius:20px; font-weight:bold;'>"
             f"{results}"
