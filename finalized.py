@@ -405,13 +405,31 @@ def get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genre, acce
     result = get(query_url, headers=headers)
     json_result = json.loads(result.content)
 
-    songs_text = ""
+    results_html = ""
     for i in json_result['tracks']:
-        songs_text += f"\"{i['name']}\" by {i['artists'][0]['name']}<br>"
-        print(f"\"{i['name']}\" by {i['artists'][0]['name']}")
+        results_html += format_song(i['name'], i['artists'][0]['name'], i['album']['images'][0]['url'], i['id'])
+        print(f"\"{i['name']}\" by {i['artists'][0]['name']}, spotify id is {i['id']}")
     
-    return songs_text
+    return results_html
     
+# format the display of each individual song
+def format_song(song_name, artist_name, album_cover_url, song_id):
+    song_html = f"""<a href='https://open.spotify.com/track/{song_id}' target='_blank' style='text-decoration: none;'><div id='my-song'><img src='{album_cover_url}' width='auto' height='50' style='border-radius: 10px; margin-right: 10px;'><div style='display: flex; flex-direction: column;'><span style='color: white; text-decoration: none; margin-bottom: 5px; font-size: 14px;'>{song_name}</span><span style='color: gray; font-size: 14px;'>{artist_name}</span></div></div></a>"""
+
+    # Add CSS style for hover and active effect
+    song_html += """<style>#my-song {background-color:black; color:white; padding:10px; border-radius:20px; margin-bottom:10px; display: flex; align-items: center; transition: background-color 0.3s; cursor: pointer;}
+    #my-song:hover {background-color: #222;}
+    #my-song:active {background-color: ##5a5a5a;}
+    </style>"""
+
+    # song_html = f"""<a href='https://open.spotify.com/track/{song_id}' target='_blank' style='text-decoration: none;'><div style='background-color:black; color:white; padding:10px; border-radius:20px; margin-bottom:10px; display: flex; align-items: center; transition: background-color 0.3s;'><img src='{album_cover_url}' width='auto' height='50' style='border-radius: 10px; margin-right: 10px;'><div style='display: flex; flex-direction: column;'><span style='color: white; text-decoration: none; margin-bottom: 5px; font-size: 14px;'>{song_name}</span><span style='color: gray; font-size: 14px;'>{artist_name}</span></div></div></a>"""
+
+    # # Add CSS style for hover effect
+    # song_html += """<style>a:hover div {background-color: #222;}</style>"""
+
+    return song_html
+
+
 # Function to get country code based on country name
 def get_country_code(country_name):
     try:
@@ -690,11 +708,12 @@ def main():
         for emotion in emotions:
             audio_ft_ranges = get_audio_ft_range(emotion)
             results += get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genres_str, access_token)
-
+        
+        print(results)
         st.markdown(
             f"<div style='background-color:#FFFFFF; color:black; padding:10px; border-radius:20px; font-weight:bold;'>"
             f"{results}"
-            "</div>", 
+            f"</div>", 
             unsafe_allow_html=True
         )
 
