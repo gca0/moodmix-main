@@ -595,7 +595,7 @@ def main():
     }
 
     div[class*="stTextInput"] label p {
-    font-size: 17px;
+    font-size: 18px;
     margin-top: 0;
     }
 
@@ -604,7 +604,7 @@ def main():
     }
 
     div[class*="stMultiSelect"] label p {
-    font-size: 17px;
+    font-size: 18px;
     }
 
     div[class*="stButton"] label p {
@@ -677,7 +677,7 @@ def main():
 
     h3 {
         font-weight: 100;
-        font-size: 25px;
+        font-size: 23px;
         font-family: sans-serif; 
         margin-top: 0;
         margin-bottom: 0;
