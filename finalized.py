@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import csv
 from requests import post, get
 from dotenv import load_dotenv
@@ -23,6 +24,18 @@ body {
   min-height: 100vh;
   background-image: linear-gradient(80deg, rgb(5, 124, 172), rgb(199, 10, 114));
   overflow: hidden;
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
 }
 
 #up {
@@ -66,8 +79,8 @@ body {
 }
 
 @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 @keyframes floating {
     0% { transform: translateY(0px); }
@@ -132,9 +145,9 @@ st.markdown(css, unsafe_allow_html=True)
 st.markdown(html, unsafe_allow_html=True)
 
 st.markdown("<h1 style='color: white; opacity: 0; animation: fadeIn 5s ease forwards, floating 2s ease infinite;'>"
-            "<span style='font-weight:bold; font-family: serif; font-size: 70px;'>moodmix</span>"
+            "<span style='font-weight:bold; font-family: serif; font-size: 70px;'>moodmix.</span>"
             "</h1>", unsafe_allow_html=True)
-
+st.markdown("<p>______________________________________</p>", unsafe_allow_html=True)
 
 # EXIT STYLING
 # --------------------------------------------------------
@@ -582,7 +595,8 @@ def main():
     }
 
     div[class*="stTextInput"] label p {
-    font-size: 15px;
+    font-size: 17px;
+    margin-top: 0;
     }
 
     div[class*="stNumberInput"] label p {
@@ -590,40 +604,206 @@ def main():
     }
 
     div[class*="stMultiSelect"] label p {
-    font-size: 15px;
+    font-size: 17px;
     }
+
+    div[class*="stButton"] label p {
+    font-size: 17px;
+    }
+
+    h2 {
+        display: inline-block;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0;
+        font-size: 33px;
+        font-weight: bold;
+        animation: fadeIn 5s ease forwards;
+    }
+
+    # .typewriter {
+    #     width: auto;
+    #     font-weight: 100;
+    #     display: inline-block;
+    #     overflow: hidden;
+    #     border-right: 1px solid white;
+    #     height: 1.5em;
+    #     white-space: nowrap;
+    #     margin: 0 auto;
+    #     # letter-spacing: .1em;
+    #     animation: typing 3.5s steps(100, end), blink-caret .75s step-end infinite;
+    # }
+
+    # @keyframes typing{
+    #     from {max-width: 0}
+    #     to {max-width: 100%}
+    # }
+
+    # @keyframes erasing {
+    #     from {max-width: 100%}
+    #     to {max-width: 0}
+    # }
+
+    # @keyframes blink-caret{
+    #     from, to {border-color: transparent}
+    #     50% {border-color: white}
+    # }
     
     </style>
     """
     st.write(tabs_font_css, unsafe_allow_html=True)
 
+    css2 = """
+    html, body {
+        padding: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        background-color: transparent;
+        font-weight: 100;
+    }
+
+    .container {
+        display: flex;
+        align-items: center; 
+        justify-content: flex-start; 
+        margin-top: 0;
+        margin-bottom: 0px;
+        margin-left: 10px;
+        padding: 0;
+        gap: 0;
+        font-weight: 100;
+    }
+
+    h3 {
+        font-weight: 100;
+        font-size: 25px;
+        font-family: sans-serif; 
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0;
+    }
+
+    }
+    .typewriter {
+        font-size: 35px;
+        font-weight: 100;
+    }
+
+    .blink {
+        animation: blink 0.5s infinite;
+    }
+    @keyframes blink{
+        to { opacity: .0; }
+    }
+    """
+    
+    js2 = """
+    const words = ['warm romantic golden orange sunset',
+            'blue hour twilight tranquil morning',
+            'lonely dark rainy crying night'];
+    let i = 0;
+    let timer;
+
+    function typingEffect() {
+        let word = words[i].split("");
+        var loopTyping = function() {
+            if (word.length > 0) {
+                document.getElementById('word').innerHTML += word.shift();
+            } else {
+                deletingEffect();
+                return false;
+            };
+            timer = setTimeout(loopTyping, 130);
+        };
+        loopTyping();
+    };
+
+    function deletingEffect() {
+        let word = words[i].split("");
+        var loopDeleting = function() {
+            if (word.length > 0) {
+                word.pop();
+                document.getElementById('word').innerHTML = word.join("");
+            } else {
+                if (words.length > (i + 1)) {
+                    i++;
+                } else {
+                    i = 0;
+                };
+                typingEffect();
+                return false;
+            };
+            timer = setTimeout(loopDeleting, 200);
+        };
+        loopDeleting();
+    };
+    typingEffect();
+    
+    """
+
+    container_html = """
+    <div class='container'>
+        <h3 class='typewriter' id='word'></h3><h3 class='typewriter blink'>|</h3>
+    </div>
+    """
+
+    # Combine HTML, CSS, and JavaScript code into a single string
+    html_code = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta name="color-scheme" content="light dark">
+            <!-- CSS -->
+            <style>
+            {css2}
+            </style>
+        </head>
+        <body>
+            <!-- HTML -->
+            {container_html}
+
+            <!-- JavaScript -->
+            <script>
+            {js2}
+            </script>
+        </body>
+        </html>
+    """
+    
+    htmll = """<h2>what are you feeling?</h2>"""
+    st.markdown(htmll, unsafe_allow_html=True)
+    st.markdown("""<style>iframe {background-color: transparent;}</style>""", unsafe_allow_html=True)
+    st.components.v1.html(html_code, height=50, scrolling=False)
+
+
+
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1: 
-        input1 = st.text_input("**enter adjective/noun/verbs:**", key=f"user_input_words_{1}").strip().lower()
+        input1 = st.text_input("**input your words:**", key=f"user_input_words_{1}").strip().lower()
         words.append(input1)
         if input1: 
             st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input1}</b></div>', unsafe_allow_html=True)
     
     with col2: 
-        input2 = st.text_input(" ", key=f"user_input_words_{2}").strip().lower()
+        input2 = st.text_input(" ", key=f"user_input_words_{2}").strip().lower()
         words.append(input2)
         if input2: 
             st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input2}</b></div>', unsafe_allow_html=True)
 
     with col3: 
-        input3 = st.text_input(" ", key=f"user_input_words_{3}").strip().lower()
+        input3 = st.text_input(" ", key=f"user_input_words_{3}").strip().lower()
         words.append(input3)
         if input3: 
             st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input3}</b></div>', unsafe_allow_html=True)
     
     with col4: 
-        input4 = st.text_input(" ", key=f"user_input_words_{4}").strip().lower()
+        input4 = st.text_input(" ", key=f"user_input_words_{4}").strip().lower()
         words.append(input4)
         if input4: 
             st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input4}</b></div>', unsafe_allow_html=True)
 
     with col5: 
-        input5 = st.text_input(" ", key=f"user_input_words_{5}").strip().lower()
+        input5 = st.text_input(" ", key=f"user_input_words_{5}").strip().lower()
         words.append(input5)
         if input5: 
             st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input5}</b></div>', unsafe_allow_html=True)
@@ -681,7 +861,7 @@ def main():
 
     # Button to generate songs
     st.text("")
-    generate_button_clicked = st.button(" **generate songs** ")
+    generate_button_clicked = st.button(" generate songs ")
     st.text("")
 
     # Check if the button is clicked
@@ -725,3 +905,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
