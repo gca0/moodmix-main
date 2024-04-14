@@ -378,7 +378,7 @@ def get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genre, acce
     endpoint_url = "https://api.spotify.com/v1/recommendations?"
     headers = get_auth_header(access_token)
     
-    query = f'limit={num_songs}&market=US&seed_genres={selected_genre}'
+    query = f'limit={num_songs}&seed_genres={selected_genre}'
     query += f'&min_acousticness={audio_ft_ranges[0]["acousticness"][0]}'
     query += f'&max_acousticness={audio_ft_ranges[0]["acousticness"][1]}'
     query += f'&min_danceability={audio_ft_ranges[0]["danceability"][0]}'
@@ -391,6 +391,8 @@ def get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genre, acce
     query += f'&max_liveness={audio_ft_ranges[0]["liveness"][1]}'
     query += f'&min_loudness={audio_ft_ranges[0]["loudness"][0]}'
     query += f'&max_loudness={audio_ft_ranges[0]["loudness"][1]}'
+    # query += f'&min_popularity={50}'
+    # query += f'&max_popularity={100}'
     query += f'&min_speechiness={audio_ft_ranges[0]["speechiness"][0]}'
     query += f'&max_speechiness={audio_ft_ranges[0]["speechiness"][1]}'
     query += f'&min_tempo={audio_ft_ranges[0]["tempo"][0]}'
