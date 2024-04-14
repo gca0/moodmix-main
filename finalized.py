@@ -660,6 +660,7 @@ def main():
         margin-bottom: 0;
         background-color: transparent;
         font-weight: 100;
+        color: #fff;
     }
 
     .container {
