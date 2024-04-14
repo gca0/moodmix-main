@@ -752,7 +752,6 @@ def main():
         <!DOCTYPE html>
         <html>
         <head>
-            <meta name="color-scheme" content="light dark">
             <!-- CSS -->
             <style>
             {css2}
