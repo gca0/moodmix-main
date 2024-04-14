@@ -1,4 +1,5 @@
 streamlit
+streamlit.components.v1
 requests
 python-dotenv
 pybase64
