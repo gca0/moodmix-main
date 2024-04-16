@@ -404,8 +404,6 @@ def get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genre, acce
     query += f'&max_liveness={audio_ft_ranges[0]["liveness"][1]}'
     query += f'&min_loudness={audio_ft_ranges[0]["loudness"][0]}'
     query += f'&max_loudness={audio_ft_ranges[0]["loudness"][1]}'
-    # query += f'&min_popularity={50}'
-    # query += f'&max_popularity={100}'
     query += f'&min_speechiness={audio_ft_ranges[0]["speechiness"][0]}'
     query += f'&max_speechiness={audio_ft_ranges[0]["speechiness"][1]}'
     query += f'&min_tempo={audio_ft_ranges[0]["tempo"][0]}'
@@ -418,6 +416,9 @@ def get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genre, acce
     print(query_url)
 
     result = get(query_url, headers=headers)
+    if result.status_code == 429: # too many requests
+        return "429"
+
     json_result = json.loads(result.content)
 
     results_html = ""
@@ -554,9 +555,39 @@ def get_audio_ft_range(emotion):
 
 # user front end stuff
 def main():
+    
+    # # Function to generate HTML for removing a tag
+    # def remove_tag_js(tag):
+    #     return f"""<script>
+    #                 document.getElementById('{tag}').remove();
+    #             </script>"""
+    
+    # # Streamlit UI components for user input
+    # st.header("moodmix", divider="green")
 
     words = []
     inputs_count = 0
+
+    # # 5 input components for user input (words)
+    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_1').strip().lower())
+    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_2').strip().lower())
+    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_3').strip().lower())
+    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_4').strip().lower())
+    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_5').strip().lower())
+
+    # add new rows
+    # if 'count' not in st.session_state:
+    #     st.session_state.count = 0
+
+    # def add_new_row():
+    #     st.text_input("Please input something",key=random.choice(string.ascii_uppercase)+str(random.randint(0,999999)))
+
+    # if st.button("Add new row"):
+    #     st.session_state.count += 1
+    #     add_new_row()
+    #     if st.session_state.count>1:
+    #         for i in range(st.session_state.count-1):
+    #             add_new_row()
 
     tabs_font_css = """
     <style>
@@ -630,7 +661,6 @@ def main():
         margin-bottom: 0;
         background-color: transparent;
         font-weight: 100;
-        color: #fff;
     }
 
     .container {
@@ -670,8 +700,8 @@ def main():
     
     js2 = """
     const words = ['warm romantic golden orange sunset',
-            'blue sky bright cheerful morning',
-            'gray rainy chill vibe evening', 'lonely dark empty crying night'];
+            'blue hour twilight tranquil morning',
+            'lonely dark rainy crying night'];
     let i = 0;
     let timer;
 
@@ -723,6 +753,7 @@ def main():
         <!DOCTYPE html>
         <html>
         <head>
+            <meta name="color-scheme" content="light dark">
             <!-- CSS -->
             <style>
             {css2}
@@ -779,6 +810,31 @@ def main():
             st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input5}</b></div>', unsafe_allow_html=True)
 
 
+
+
+    # # Main loop to handle user input
+    # while len(words) < 5:
+    #     input_word = st.text_input("enter a noun or verb: ", key=f"user_input_words_{inputs_count}").strip().lower()
+    #     words.append(input_word)
+    #     inputs_count += 1
+        
+    
+    # add_fields_button_clicked = st.button("Add word (Max 8)")
+    # if add_fields_button_clicked: 
+    #     input_word = st.text_input("Enter a word or phrase: ", key=f"user_input_words_{inputs_count}").strip().lower()
+    #     words.append(input_word)
+    #     inputs_count += 1
+    #     st.write(input_word)
+
+        # if inputs_count >= 5:
+        #     choice = st.radio("You've entered at least 5 words. Do you want to add more?", ('Yes', 'No'), key=f"ask_user_if_more_words_{inputs_count}")
+        #     if choice != 'No':
+        #         break
+        
+        # if len(words) >= 8:
+        #     st.write("You've entered 8 words. We'll stop adding more words.")
+        #     break
+
     # determine the emotion(s) of the user input
     emotions = categorize_emotion(words)
     access_token = get_access_token()
@@ -790,6 +846,19 @@ def main():
 
     # Convert the list of selected genres to a single string with "%2C" in between each genre
     selected_genres_str = "%2C".join(selected_genres)
+
+    # # Display the selected genres
+    # st.write("selected genre(s):", selected_genres)
+
+    # # prompt user for markets 
+    # market_input = st.multiselect("Select country of origin (max 5):", COUNTRIES)
+
+    # selected_markets = []
+    # for market in market_input: 
+    #     selected_markets.append(get_country_code(market))
+
+    # selected_markets = "%2C".join(selected_markets)
+    # st.write("Selected Markets:", market_input)
 
     # Button to generate songs
     st.text("")
@@ -819,18 +888,32 @@ def main():
         st.write("<div style='text-align:center; font-weight:bold; font-size:20px;'>generating your songs...</div>", unsafe_allow_html=True)
         st.text("")
 
+        single_result = ""
         for emotion in emotions:
             audio_ft_ranges = get_audio_ft_range(emotion)
-            results += get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genres_str, access_token)
+            single_result = get_spotify_recommendations(num_songs, audio_ft_ranges, selected_genres_str, access_token)
+            if single_result == "429": 
+                results = "429"
+                break
+            results += single_result
         
         print(results)
-        st.write("<div style='text-align:center; font-weight:bold; font-size:14px;'>click on a song to listen on spotify:</div>", unsafe_allow_html=True)
-        st.markdown(
+
+        if results == "429":
+            st.markdown(
             f"<div style='background-color:#FFFFFF; color:black; padding:10px; border-radius:20px; font-weight:bold;'>"
-            f"{results}"
+            f"Woo there is too much traffic at the moment 🥹... Come back and try again later!🫶"
             f"</div>", 
             unsafe_allow_html=True
-        )
+            )
+        else: 
+            st.write("<div style='text-align:center; font-weight:bold; font-size:14px;'>click on a song to listen on spotify:</div>", unsafe_allow_html=True)
+            st.markdown(
+                f"<div style='background-color:#FFFFFF; color:black; padding:10px; border-radius:20px; font-weight:bold;'>"
+                f"{results}"
+                f"</div>", 
+                unsafe_allow_html=True
+            )
 
 
 
