@@ -661,6 +661,7 @@ def main():
         margin-bottom: 0;
         background-color: transparent;
         font-weight: 100;
+        font-color: white;
     }
 
     .container {
@@ -679,6 +680,7 @@ def main():
         font-weight: 100;
         font-size: 23px;
         font-family: sans-serif; 
+        font-color: white;
         margin-top: 0;
         margin-bottom: 0;
         padding: 0;
