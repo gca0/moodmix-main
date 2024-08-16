@@ -285,47 +285,9 @@ GENRES = [
     "work-out",
     "world-music"
 ]
-COUNTRIES = [
-    "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica",
-    "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas (the)",
-    "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan",
-    "Bolivia (Plurinational State of)", "Bonaire, Sint Eustatius and Saba", "Bosnia and Herzegovina", "Botswana",
-    "Bouvet Island", "Brazil", "British Indian Ocean Territory (the)", "Brunei Darussalam", "Bulgaria", "Burkina Faso",
-    "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Cayman Islands (the)", "Central African Republic (the)",
-    "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands (the)", "Colombia", "Comoros (the)",
-    "Congo (the Democratic Republic of the)", "Congo (the)", "Cook Islands (the)", "Costa Rica", "Croatia", "Cuba",
-    "Curaçao", "Cyprus", "Czechia", "Côte d'Ivoire", "Denmark", "Djibouti", "Dominica", "Dominican Republic (the)",
-    "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia",
-    "Falkland Islands (the) [Malvinas]", "Faroe Islands (the)", "Fiji", "Finland", "France", "French Guiana",
-    "French Polynesia", "French Southern Territories (the)", "Gabon", "Gambia (the)", "Georgia", "Germany", "Ghana",
-    "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea",
-    "Guinea-Bissau", "Guyana", "Haiti", "Heard Island and McDonald Islands", "Holy See (the)", "Honduras", "Hong Kong",
-    "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Isle of Man", "Israel",
-    "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea (the Democratic People's Republic of)",
-    "Korea (the Republic of)", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic (the)", "Latvia", "Lebanon", "Lesotho",
-    "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Madagascar", "Malawi", "Malaysia", "Maldives",
-    "Mali", "Malta", "Marshall Islands (the)", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia (Federated States of)",
-    "Moldova (the Republic of)", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia",
-    "Nauru", "Nepal", "Netherlands (the)", "New Caledonia", "New Zealand", "Nicaragua", "Niger (the)", "Nigeria", "Niue",
-    "Norfolk Island", "Northern Mariana Islands (the)", "Norway", "Oman", "Pakistan", "Palau", "Palestine, State of", "Panama",
-    "Papua New Guinea", "Paraguay", "Peru", "Philippines (the)", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar",
-    "Republic of North Macedonia", "Romania", "Russian Federation (the)", "Rwanda", "Réunion", "Saint Barthélemy",
-    "Saint Helena, Ascension and Tristan da Cunha", "Saint Kitts and Nevis", "Saint Lucia", "Saint Martin (French part)",
-    "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe",
-    "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Sint Maarten (Dutch part)", "Slovakia",
-    "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", "South Sudan",
-    "Spain", "Sri Lanka", "Sudan (the)", "Suriname", "Svalbard and Jan Mayen", "Sweden", "Switzerland", "Syrian Arab Republic",
-    "Taiwan (Province of China)", "Tajikistan", "Tanzania, United Republic of", "Thailand", "Timor-Leste", "Togo", "Tokelau",
-    "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands (the)", "Tuvalu", "Uganda",
-    "Ukraine", "United Arab Emirates (the)", "United Kingdom of Great Britain and Northern Ireland (the)",
-    "United States Minor Outlying Islands (the)", "United States of America (the)", "Uruguay", "Uzbekistan", "Vanuatu",
-    "Venezuela (Bolivarian Republic of)", "Viet Nam", "Virgin Islands (British)", "Virgin Islands (U.S.)", "Wallis and Futuna",
-    "Western Sahara", "Yemen", "Zambia", "Zimbabwe", "Åland Islands"
-]
 
 # files
 expanded_word_data = "word_data_with_colors.csv"
-iso_countries = "country_iso_codes.xlsx"
 # Load the Excel file into a pandas DataFrame
 df = pd.read_excel(iso_countries)
 
@@ -446,14 +408,6 @@ def format_song(song_name, artist_name, album_cover_url, song_id):
     return song_html
 
 
-# Function to get country code based on country name
-def get_country_code(country_name):
-    try:
-        code = df.loc[df['Country'].str.lower() == country_name.lower(), 'Alpha-2 code'].iloc[0]
-        return code
-    except IndexError:
-        return "Country not found"
-
 # searches for user inputted word in expanded word data, and return the valence and arousal
 def search_word(word): 
     with open(expanded_word_data, 'r') as file:
@@ -555,39 +509,9 @@ def get_audio_ft_range(emotion):
 
 # user front end stuff
 def main():
-    
-    # # Function to generate HTML for removing a tag
-    # def remove_tag_js(tag):
-    #     return f"""<script>
-    #                 document.getElementById('{tag}').remove();
-    #             </script>"""
-    
-    # # Streamlit UI components for user input
-    # st.header("moodmix", divider="green")
 
     words = []
     inputs_count = 0
-
-    # # 5 input components for user input (words)
-    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_1').strip().lower())
-    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_2').strip().lower())
-    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_3').strip().lower())
-    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_4').strip().lower())
-    # words.append(st.text_input("Enter a word or phrase: ", key=f'user_input_5').strip().lower())
-
-    # add new rows
-    # if 'count' not in st.session_state:
-    #     st.session_state.count = 0
-
-    # def add_new_row():
-    #     st.text_input("Please input something",key=random.choice(string.ascii_uppercase)+str(random.randint(0,999999)))
-
-    # if st.button("Add new row"):
-    #     st.session_state.count += 1
-    #     add_new_row()
-    #     if st.session_state.count>1:
-    #         for i in range(st.session_state.count-1):
-    #             add_new_row()
 
     tabs_font_css = """
     <style>
@@ -621,34 +545,6 @@ def main():
         font-weight: bold;
         animation: fadeIn 5s ease forwards;
     }
-
-    # .typewriter {
-    #     width: auto;
-    #     font-weight: 100;
-    #     display: inline-block;
-    #     overflow: hidden;
-    #     border-right: 1px solid white;
-    #     height: 1.5em;
-    #     white-space: nowrap;
-    #     margin: 0 auto;
-    #     # letter-spacing: .1em;
-    #     animation: typing 3.5s steps(100, end), blink-caret .75s step-end infinite;
-    # }
-
-    # @keyframes typing{
-    #     from {max-width: 0}
-    #     to {max-width: 100%}
-    # }
-
-    # @keyframes erasing {
-    #     from {max-width: 100%}
-    #     to {max-width: 0}
-    # }
-
-    # @keyframes blink-caret{
-    #     from, to {border-color: transparent}
-    #     50% {border-color: white}
-    # }
     
     </style>
     """
@@ -811,34 +707,10 @@ def main():
             st.markdown(f'<div style="background-color:#FFFFFF; color:#000000; padding:10px; border-radius:10px; width:100px; text-align:center;"><b>{input5}</b></div>', unsafe_allow_html=True)
 
 
-
-
-    # # Main loop to handle user input
-    # while len(words) < 5:
-    #     input_word = st.text_input("enter a noun or verb: ", key=f"user_input_words_{inputs_count}").strip().lower()
-    #     words.append(input_word)
-    #     inputs_count += 1
-        
-    
-    # add_fields_button_clicked = st.button("Add word (Max 8)")
-    # if add_fields_button_clicked: 
-    #     input_word = st.text_input("Enter a word or phrase: ", key=f"user_input_words_{inputs_count}").strip().lower()
-    #     words.append(input_word)
-    #     inputs_count += 1
-    #     st.write(input_word)
-
-        # if inputs_count >= 5:
-        #     choice = st.radio("You've entered at least 5 words. Do you want to add more?", ('Yes', 'No'), key=f"ask_user_if_more_words_{inputs_count}")
-        #     if choice != 'No':
-        #         break
-        
-        # if len(words) >= 8:
-        #     st.write("You've entered 8 words. We'll stop adding more words.")
-        #     break
-
     # determine the emotion(s) of the user input
     emotions = categorize_emotion(words)
     access_token = get_access_token()
+    
     # Prompt the user for genre selection
     # Create a dropdown menu with multiple selection enabled
     st.text("")
@@ -847,19 +719,6 @@ def main():
 
     # Convert the list of selected genres to a single string with "%2C" in between each genre
     selected_genres_str = "%2C".join(selected_genres)
-
-    # # Display the selected genres
-    # st.write("selected genre(s):", selected_genres)
-
-    # # prompt user for markets 
-    # market_input = st.multiselect("Select country of origin (max 5):", COUNTRIES)
-
-    # selected_markets = []
-    # for market in market_input: 
-    #     selected_markets.append(get_country_code(market))
-
-    # selected_markets = "%2C".join(selected_markets)
-    # st.write("Selected Markets:", market_input)
 
     # Button to generate songs
     st.text("")
