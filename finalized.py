@@ -661,6 +661,7 @@ def main():
         margin-bottom: 0;
         background-color: transparent;
         font-weight: 100;
+        color: white;
     }
 
     .container {
@@ -679,6 +680,7 @@ def main():
         font-weight: 100;
         font-size: 23px;
         font-family: sans-serif; 
+        color: white;
         margin-top: 0;
         margin-bottom: 0;
         padding: 0;
@@ -753,7 +755,6 @@ def main():
         <!DOCTYPE html>
         <html>
         <head>
-            <meta name="color-scheme" content="light dark">
             <!-- CSS -->
             <style>
             {css2}
@@ -920,7 +921,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
 
